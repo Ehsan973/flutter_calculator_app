@@ -14,8 +14,12 @@ class Application extends StatelessWidget {
       children: [
         TextButton(
           onPressed: () {},
+          style: TextButton.styleFrom(
+            backgroundColor: getBackgroundColor(text1),
+            shape: CircleBorder(),
+          ),
           child: Padding(
-            padding: EdgeInsets.all(3),
+            padding: EdgeInsets.all(5),
             child: Text(
               text1,
               textAlign: TextAlign.center,
@@ -25,8 +29,12 @@ class Application extends StatelessWidget {
         ),
         TextButton(
           onPressed: () {},
+          style: TextButton.styleFrom(
+            backgroundColor: getBackgroundColor(text2),
+            shape: CircleBorder(),
+          ),
           child: Padding(
-            padding: EdgeInsets.all(3),
+            padding: EdgeInsets.all(5),
             child: Text(
               text2,
               textAlign: TextAlign.center,
@@ -36,8 +44,17 @@ class Application extends StatelessWidget {
         ),
         TextButton(
           onPressed: () {},
+          style: TextButton.styleFrom(
+            backgroundColor: getBackgroundColor(text3),
+            shape: CircleBorder(
+              side: BorderSide(
+                width: 0,
+                color: Colors.transparent,
+              ),
+            ),
+          ),
           child: Padding(
-            padding: EdgeInsets.all(3),
+            padding: EdgeInsets.all(5),
             child: Text(
               text3,
               textAlign: TextAlign.center,
@@ -47,9 +64,18 @@ class Application extends StatelessWidget {
         ),
         TextButton(
           onPressed: () {},
-          style: ButtonStyle(),
+          style: TextButton.styleFrom(
+            backgroundColor: getBackgroundColor(text4),
+            shape: CircleBorder(
+              // borderRadius: BorderRadius.circular(10),
+              side: BorderSide(
+                width: 0,
+                color: Colors.transparent,
+              ),
+            ),
+          ),
           child: Padding(
-            padding: EdgeInsets.all(3),
+            padding: EdgeInsets.all(5),
             child: Text(
               text4,
               textAlign: TextAlign.center,
@@ -95,4 +121,16 @@ class Application extends StatelessWidget {
       ),
     );
   }
+
+  bool isOperator(String text) {
+    var operators = ['ac', 'ce', '%', '/', '*', '-', '+', '='];
+    for (var operator in operators) {
+      if (text == operator) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  Color getBackgroundColor(String text) {}
 }
