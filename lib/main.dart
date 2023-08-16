@@ -1,19 +1,57 @@
 import 'package:calculator_app/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:math_expressions/math_expressions.dart';
 
 void main() {
-  runApp(const Application());
+  runApp(Application());
 }
 
-class Application extends StatelessWidget {
-  const Application({super.key});
+class Application extends StatefulWidget {
+  Application({super.key});
+
+  @override
+  State<Application> createState() => _ApplicationState();
+}
+
+class _ApplicationState extends State<Application> {
+  var inputUser = '';
+  var result = '';
+
+  void buttonPressed(String text) {
+    if (text == 'ac') {
+      setState(() {
+        inputUser = '';
+        result = '';
+      });
+    } else if (text == 'ce') {
+      if (inputUser.length != 0) {
+        setState(() {
+          inputUser = inputUser.substring(0, inputUser.length - 1);
+        });
+      }
+    } else if (text == '=') {
+      Parser parser = Parser();
+      Expression expression = parser.parse(inputUser);
+      ContextModel contextModel = ContextModel();
+      double eval = expression.evaluate(EvaluationType.REAL, contextModel);
+      setState(() {
+        result = eval.toString();
+      });
+    } else {
+      setState(() {
+        inputUser += text;
+      });
+    }
+  }
 
   Widget getRow(String text1, String text2, String text3, String text4) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
         TextButton(
-          onPressed: () {},
+          onPressed: () {
+            buttonPressed(text1);
+          },
           style: TextButton.styleFrom(
             backgroundColor: getBackgroundColor(text1),
             shape: CircleBorder(),
@@ -28,7 +66,9 @@ class Application extends StatelessWidget {
           ),
         ),
         TextButton(
-          onPressed: () {},
+          onPressed: () {
+            buttonPressed(text2);
+          },
           style: TextButton.styleFrom(
             backgroundColor: getBackgroundColor(text2),
             shape: CircleBorder(),
@@ -43,7 +83,9 @@ class Application extends StatelessWidget {
           ),
         ),
         TextButton(
-          onPressed: () {},
+          onPressed: () {
+            buttonPressed(text3);
+          },
           style: TextButton.styleFrom(
             backgroundColor: getBackgroundColor(text3),
             shape: CircleBorder(
@@ -63,7 +105,9 @@ class Application extends StatelessWidget {
           ),
         ),
         TextButton(
-          onPressed: () {},
+          onPressed: () {
+            buttonPressed(text4);
+          },
           style: TextButton.styleFrom(
             backgroundColor: getBackgroundColor(text4),
             shape: CircleBorder(
@@ -118,31 +162,58 @@ class Application extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        body: Column(
-          children: [
-            Expanded(
-              flex: 3,
-              child: Container(
-                color: backgroundGreyDark,
-              ),
-            ),
-            Expanded(
-              flex: 7,
-              child: Container(
-                color: backgroundGrey,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    getRow('ac', 'ce', '%', '/'),
-                    getRow('1', '2', '3', '*'),
-                    getRow('4', '5', '6', '-'),
-                    getRow('7', '8', '9', '+'),
-                    getRow('00', '0', '.', '='),
-                  ],
+        backgroundColor: backgroundGrey,
+        body: SafeArea(
+          child: Column(
+            children: [
+              Expanded(
+                flex: 3,
+                child: Container(
+                  color: backgroundGreyDark,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.all(8),
+                        child: Text(
+                          inputUser,
+                          textAlign: TextAlign.end,
+                          style: TextStyle(
+                              fontSize: 28,
+                              color: textGreen,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      Text(
+                        result,
+                        textAlign: TextAlign.end,
+                        style: TextStyle(
+                          color: textGrey,
+                          fontSize: 62,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
+              Expanded(
+                flex: 7,
+                child: Container(
+                  color: backgroundGrey,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      getRow('ac', 'ce', '%', '/'),
+                      getRow('1', '2', '3', '*'),
+                      getRow('4', '5', '6', '-'),
+                      getRow('7', '8', '9', '+'),
+                      getRow('00', '0', '.', '='),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
